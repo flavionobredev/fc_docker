@@ -24,7 +24,7 @@ services:
       MYSQL_DATABASE: fcdockerdb
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     container_name: mysql
     restart: always
     networks:
@@ -35,4 +35,5 @@ services:
       MYSQL_USER: fcuser
       MYSQL_PASSWORD: fcpwd
     volumes:
+      - ./dump:/docker-entrypoint-initdb.d
       - ./.docker/mysql:/var/lib/mysql
