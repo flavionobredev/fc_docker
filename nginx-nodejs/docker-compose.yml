@@ -17,3 +17,22 @@ services:
       - nginx-node
     environment:
       PORT: 3000
+      MYSQL_PORT: 3306
+      MYSQL_HOST: mysql
+      MYSQL_USER: fcuser
+      MYSQL_PASSWORD: fcpwd
+      MYSQL_DATABASE: fcdockerdb
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    networks:
+      - nginx-node
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fcdockerdb
+      MYSQL_USER: fcuser
+      MYSQL_PASSWORD: fcpwd
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
