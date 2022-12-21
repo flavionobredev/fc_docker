@@ -12,15 +12,15 @@ services:
     container_name: node-api
     volumes:
       - ./api:/usr/nodeapi/app
-    entrypoint: sh -c "npm install && npm run start"
+    entrypoint: dockerize -wait tcp://mysql:3306 -timeout 240s sh -c "npm install && npm run start"
     networks:
       - nginx-node
     environment:
       PORT: 3000
       MYSQL_PORT: 3306
       MYSQL_HOST: mysql
-      MYSQL_USER: fcuser
-      MYSQL_PASSWORD: fcpwd
+      MYSQL_USER: fcdockerdbuser
+      MYSQL_PASSWORD: fcdockerdbpwd
       MYSQL_DATABASE: fcdockerdb
 
   mysql:
@@ -32,8 +32,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: fcdockerdb
-      MYSQL_USER: fcuser
-      MYSQL_PASSWORD: fcpwd
+      MYSQL_USER: fcdockerdbuser
+      MYSQL_PASSWORD: fcdockerdbpwd
     volumes:
       - ./migration.sql:/tmp/migration.sql
       - ./.docker/mysql:/var/lib/mysql
@@ -45,6 +45,7 @@ services:
     restart: always
     ports:
       - "8080:80"
+      - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/proxy.conf:/etc/nginx/proxy.conf
