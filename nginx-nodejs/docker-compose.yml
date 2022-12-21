@@ -35,5 +35,6 @@ services:
       MYSQL_USER: fcuser
       MYSQL_PASSWORD: fcpwd
     volumes:
-      - ./dump:/docker-entrypoint-initdb.d
+      - ./migration.sql:/tmp/migration.sql
       - ./.docker/mysql:/var/lib/mysql
+    command: "--init-file=/tmp/migration.sql"
