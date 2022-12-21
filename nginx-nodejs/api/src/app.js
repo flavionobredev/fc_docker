@@ -10,19 +10,18 @@ const dbConnection = mysql.createConnection({
 });
 
 app.get("/", (req, res) => {
-  res.removeHeader("X-Powered-By");
-  res.send("<h1>Full Cycle Rocks!</h1>");
-});
-
-app.get("/users/add-random", (req, res) => {
-  const name = Math.random().toString(36).substring(7);
-  const sql = `INSERT INTO people(name) VALUES ('${name}')`;
-  dbConnection.query(sql, (err, result) => {
+  dbConnection.query("SELECT * FROM people", (err, result) => {
     if (err) {
-      console.log(err)
-      res.status(500).send("Error inserting user");
+      res.status(500).send("Error: " + err);
     } else {
-      res.send(`User ${name} inserted`);
+      const resultString = `
+        <h1>Full Cycle Rocks!</h1>
+        <ol>
+          ${result.map((person) => `<li>${person.name}</li>`).join("\n")}
+        </ol>
+      `;
+      res.removeHeader("X-Powered-By");
+      res.send(resultString);
     }
   });
 });
